@@ -84,7 +84,7 @@
     <footer id="footer">
       <br>
       <br>
-      <h5 align="center" style="color: #6D717A;">Powered By <a href="https://www.attendize.com/">Attendize</a> </h5>
+      <h5 align="center" style="color: #6D717A;">Powered by <a href="https://housenights.com">House Nights</a> </h5>
     </footer>
   </div>
 
