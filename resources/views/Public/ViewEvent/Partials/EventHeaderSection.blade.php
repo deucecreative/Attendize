@@ -12,7 +12,11 @@
         <div class="row">
             <div class="col-md-12">
                 <div onclick="window.location='{{$event->event_url}}#organiser'" class="event_organizer">
+                    @if($event->organiser->full_logo_path === config('attendize.fallback_organiser_logo_url'))
                     <b>{{$event->organiser->name}}</b> Presents
+                    @else
+                    <img alt="{{$event->organiser->name}}" src="{{asset($event->organiser->full_logo_path)}}" property="logo">
+                    @endif
                 </div>
             </div>
         </div>
