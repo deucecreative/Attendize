@@ -57,6 +57,8 @@
             body {background:none !important;}
             body {background:none transparent !important;}
         </style>
+
+        @include('Shared.Partials.GlobalHeaderJS')
     </head>
     <body class="attendize">
         @yield('content')

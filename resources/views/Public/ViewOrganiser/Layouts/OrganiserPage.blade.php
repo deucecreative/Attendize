@@ -22,6 +22,7 @@
         <![endif]-->
 
        {!!HTML::style('assets/stylesheet/frontend.css')!!}
+        @include('Shared.Partials.GlobalHeaderJS')
         @yield('head')
     </head>
     <body class="attendize">

@@ -64,6 +64,8 @@
                 color: #ccc;
             }
         </style>
+
+        @include('Shared.Partials.GlobalHeaderJS')
     </head>
     <body>
         <section id="main" role="main">

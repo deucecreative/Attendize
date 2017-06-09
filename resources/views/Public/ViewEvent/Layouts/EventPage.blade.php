@@ -66,6 +66,8 @@
             </style>
         @endif
 
+        @include('Shared.Partials.GlobalHeaderJS')
+
     </head>
     <body class="attendize">
         <div id="event_page_wrap" vocab="http://schema.org/" typeof="Event">
