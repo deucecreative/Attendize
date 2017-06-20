@@ -70,6 +70,7 @@
 
     </head>
     <body class="attendize">
+        @include('Shared.Partials.GlobalHeaderJS')
         <div id="event_page_wrap" vocab="http://schema.org/" typeof="Event">
             @yield('content')
 

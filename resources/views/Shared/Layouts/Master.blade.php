@@ -26,6 +26,7 @@
     @yield('head')
 </head>
 <body class="attendize">
+@include('Shared.Partials.GlobalBodyJS')
 @yield('pre_header')
 <header id="header" class="navbar">
 

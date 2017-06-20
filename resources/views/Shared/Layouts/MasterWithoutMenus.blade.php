@@ -68,6 +68,7 @@
         @include('Shared.Partials.GlobalHeaderJS')
     </head>
     <body>
+        @include('Shared.Partials.GlobalBodyJS')
         <section id="main" role="main">
             <section class="container">
                 @yield('content')

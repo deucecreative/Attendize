@@ -26,6 +26,7 @@
         @yield('head')
     </head>
     <body class="attendize">
+        @include('Shared.Partials.GlobalBodyJS')
         @include('Shared.Partials.FacebookSdk')
         <div id="organiser_page_wrap">
             @yield('content')

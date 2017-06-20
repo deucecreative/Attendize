@@ -61,6 +61,7 @@
         @include('Shared.Partials.GlobalHeaderJS')
     </head>
     <body class="attendize">
+        @include('Shared.Partials.GlobalBodyJS')
         @yield('content')
 
         {!!HTML::script('assets/javascript/frontend.js')!!}
