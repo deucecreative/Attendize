@@ -415,8 +415,20 @@ Small devices (tablets, 768px and up)
   /*#intro h1  { font-size: 50px; }*/
 }
 
-.rrssb-buttons.large-format li a {
-  border-radius: 0;
+.rrssb-text-large-format-only {
+    display: none;
+}
+
+.rrssb-buttons.large-format li {
+  line-height: 1;
+
+  a {
+    border-radius: 0;
+
+    .rrssb-text-large-format-only {
+        display: inline-block;
+    }
+  }
 }
 
 /*
