@@ -28,8 +28,16 @@ label.required::after {
 
 section.container {
   padding: 40px;
-  background-color: rgba(0, 0, 0, .8);
+  background-color: #ffffff;
   margin-bottom: 25px;
+
+  &#tickets,
+  &#details,
+  &#share,
+  &#location,
+  &#organiser {
+    background-color: rgba(0, 0, 0, .8);
+  }
 }
 
 .section_head {
@@ -49,7 +57,15 @@ section.container {
 }
 
 section {
-  color: #eee;
+  color: #666;
+
+  &#tickets,
+  &#details,
+  &#share,
+  &#location,
+  &#organiser {
+    color: #eee;
+  }
 }
 
 section .content {
