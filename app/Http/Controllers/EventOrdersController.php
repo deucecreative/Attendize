@@ -53,9 +53,9 @@ class EventOrdersController extends MyBaseController
                         ->orWhere('last_name', 'like', $searchQuery . '%');
                 })
                 ->orderBy($sort_by, $sort_order)
-                ->paginate();
+                ->paginate(config('attendize.default_items_per_page'));
         } else {
-            $orders = $event->orders()->orderBy($sort_by, $sort_order)->paginate();
+            $orders = $event->orders()->orderBy($sort_by, $sort_order)->paginate(config('attendize.default_items_per_page'));
         }
 
         $data = [

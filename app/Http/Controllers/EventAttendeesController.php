@@ -55,14 +55,14 @@ class EventAttendeesController extends MyBaseController
                 })
                 ->orderBy(($sort_by == 'order_reference' ? 'orders.' : 'attendees.') . $sort_by, $sort_order)
                 ->select('attendees.*', 'orders.order_reference')
-                ->paginate();
+                ->paginate(config('attendize.default_items_per_page'));
         } else {
             $attendees = $event->attendees()
                 ->join('orders', 'orders.id', '=', 'attendees.order_id')
                 ->withoutCancelled()
                 ->orderBy(($sort_by == 'order_reference' ? 'orders.' : 'attendees.') . $sort_by, $sort_order)
                 ->select('attendees.*', 'orders.order_reference')
-                ->paginate();
+                ->paginate(config('attendize.default_items_per_page'));
         }
 
         $data = [
