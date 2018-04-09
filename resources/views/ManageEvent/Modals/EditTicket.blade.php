@@ -68,6 +68,20 @@
                 </div>
 
                 <div class="row more-options">
+                    <div class="col-sm-6">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="custom-checkbox">
+                                {!! Form::checkbox('show_as_sold_out_once_ended', null, null, ['id' => 'show_as_sold_out_once_ended']) !!}
+                                {!! Form::label('show_as_sold_out_once_ended', 'Show as sold out once ended', array('class'=>' control-label')) !!}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row more-options">
                     <div class="col-md-6">
                         <div class="form-group">
                             {!! Form::label('min_per_person', 'Minimum Tickets Per Order', ['class'=>' control-label']) !!}

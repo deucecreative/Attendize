@@ -198,6 +198,9 @@ class Ticket extends MyBaseModel
         }
 
         if ($this->end_sale_date !== null && $this->end_sale_date->isPast()) {
+            if ($this->show_as_sold_out_once_ended) {
+                return config('attendize.ticket_status_sold_out');
+            }
             return config('attendize.ticket_status_after_sale_date');
         }
 

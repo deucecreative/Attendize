@@ -28,9 +28,14 @@
                                 <span class="ticket-title semibold" property="name">
                                     {{$ticket->title}}
                                 </span>
+                                            @if(
+                                                $ticket->sale_status !== config('attendize.ticket_status_sold_out') &&
+                                                $ticket->sale_status !== config('attendize.ticket_status_after_sale_date')
+                                            )
                                             <p class="ticket-descripton mb0 text-muted" property="description">
                                                 {{$ticket->description}}
                                             </p>
+                                            @endif
                                         </td>
                                         <td style="width:180px; text-align: right;">
                                             <div class="ticket-pricing" style="margin-right: 20px;">
@@ -41,7 +46,21 @@
                                                     <?php
                                                     $is_free_event = false;
                                                     ?>
-                                                    <span title='{{money($ticket->price, $event->currency)}} Ticket Price + {{money($ticket->total_booking_fee, $event->currency)}} Booking Fees'>{{money($ticket->total_price, $event->currency)}} </span>
+                                                    <span title='{{money($ticket->price, $event->currency)}} Ticket Price + {{money($ticket->total_booking_fee, $event->currency)}} Booking Fees'>
+                                                        @if(
+                                                            $ticket->sale_status === config('attendize.ticket_status_sold_out') ||
+                                                            $ticket->sale_status === config('attendize.ticket_status_after_sale_date')
+                                                        )
+                                                        <del>
+                                                        @endif
+                                                        {{money($ticket->total_price, $event->currency)}}
+                                                        @if(
+                                                            $ticket->sale_status === config('attendize.ticket_status_sold_out') ||
+                                                            $ticket->sale_status === config('attendize.ticket_status_after_sale_date')
+                                                        )
+                                                        </del>
+                                                        @endif
+                                                    </span>
                                                     <meta property="priceCurrency"
                                                           content="{{ $event->currency->code }}">
                                                     <meta property="price"
