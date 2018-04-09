@@ -47,7 +47,7 @@
     }
 </style>
 
-<section id="order_form" class="container">
+<section id="order_complete" class="container">
     <div class="row">
         <div class="col-md-12 order_header">
             <span class="massive-icon">
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div id="order_details" class="row">
         <div class="col-md-12">
             <div class="content event_view_order">
 
