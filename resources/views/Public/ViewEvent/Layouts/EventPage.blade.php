@@ -11,7 +11,7 @@
 
 
         <!-- Open Graph data -->
-        <meta property="og:title" content="{{{$event->title}}}" />
+        <meta property="og:title" content="{{{$event->title}}} &mdash; Get Tickets" />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="{{$event->event_url}}?utm_source=fb" />
         @if($event->images->count())
