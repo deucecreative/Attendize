@@ -519,6 +519,7 @@ class EventCheckoutController extends Controller
             $order->first_name = $request_data['order_first_name'];
             $order->last_name = $request_data['order_last_name'];
             $order->email = $request_data['order_email'];
+            $order->privacy_policy = isset($request_data['order_privacy_policy']) ? 1 : 0;
             $order->order_status_id = isset($request_data['pay_offline']) ? config('attendize.order_awaiting_payment') : config('attendize.order_complete');
             $order->amount = $ticket_order['order_total'];
             $order->booking_fee = $ticket_order['booking_fee'];
