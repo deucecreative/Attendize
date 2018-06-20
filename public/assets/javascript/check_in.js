@@ -120,8 +120,6 @@ var checkinApp = new Vue({
                     that.videoElement.mozSrcObject = stream;
                 }
 
-                that.videoElement.play();
-
             }, function () { /* error*/
             });
 
