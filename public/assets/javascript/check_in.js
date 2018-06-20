@@ -110,7 +110,12 @@ var checkinApp = new Vue({
             qrcode.callback = this.QrCheckin;
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-            navigator.getUserMedia({video: true, audio: false}, function (stream) {
+            navigator.getUserMedia({
+                video: {
+                    facingMode: 'environment'
+                },
+                audio: false
+            }, function (stream) {
 
                 that.stream = stream;
 
