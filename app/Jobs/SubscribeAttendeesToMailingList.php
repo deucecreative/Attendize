@@ -39,14 +39,16 @@ class SubscribeAttendeesToMailingList extends Job implements ShouldQueue
 
             Log::info(sprintf('Attempting to subscribe %s %s <%s> to mailing list...', $attendee->first_name, $attendee->last_name, $attendee->email));
 
-            $res = Sendy::subscribe([
-                'name' => $attendee->first_name,
+            $data = Sendy::subscribe([
                 'email' => $attendee->email,
+                'name' => $attendee->first_name,
                 'referrer' => config('app.url'),
                 'gdpr' => 'true',
             ]);
 
-            Log::info(sprintf('%s: %s', $res['status'] ? 'Success' : 'Error', $res['message']));
+            $response = Sendy::subscribe($data);
+
+            Log::info(sprintf('%s: %s', $response['status'] ? 'Success' : 'Error', $response['message']), $data);
         });
     }
 }
