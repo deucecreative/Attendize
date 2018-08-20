@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Events\OrderCompletedEvent;
+use App\Models\Account;
+use App\Models\AccountPaymentGateway;
 use App\Models\Affiliate;
 use App\Models\Attendee;
 use App\Models\Event;
 use App\Models\EventStats;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\PaymentGateway;
 use App\Models\QuestionAnswer;
 use App\Models\ReservedTickets;
 use App\Models\Ticket;
+use App\Services\Order as OrderService;
 use Carbon\Carbon;
 use Cookie;
 use DB;
@@ -184,6 +188,15 @@ class EventCheckoutController extends Controller
             ]);
         }
 
+        if (config('attendize.enable_dummy_payment_gateway') == TRUE) {
+            $activeAccountPaymentGateway = new AccountPaymentGateway();
+            $activeAccountPaymentGateway->fill(['payment_gateway_id' => config('attendize.payment_gateway_dummy')]);
+            $paymentGateway= $activeAccountPaymentGateway;
+        } else {
+            $activeAccountPaymentGateway = count($event->account->active_payment_gateway) ? $event->account->active_payment_gateway : false;
+            $paymentGateway = count($event->account->active_payment_gateway) ? $event->account->active_payment_gateway->payment_gateway : false;
+       }
+
         /*
          * The 'ticket_order_{event_id}' session stores everything we need to complete the transaction.
          */
@@ -203,8 +216,8 @@ class EventCheckoutController extends Controller
             'order_requires_payment'  => (ceil($order_total) == 0) ? false : true,
             'account_id'              => $event->account->id,
             'affiliate_referral'      => Cookie::get('affiliate_' . $event_id),
-            'account_payment_gateway' => count($event->account->active_payment_gateway) ? $event->account->active_payment_gateway : false,
-            'payment_gateway'         => count($event->account->active_payment_gateway) ? $event->account->active_payment_gateway->payment_gateway : false,
+            'account_payment_gateway' => $activeAccountPaymentGateway,
+            'payment_gateway'         => $paymentGateway
         ]);
 
         /*
@@ -245,11 +258,17 @@ class EventCheckoutController extends Controller
 
         $secondsToExpire = Carbon::now()->diffInSeconds($order_session['expires']);
 
+        $event = Event::findorFail($order_session['event_id']);
+
+        $orderService = new OrderService($order_session['order_total'], $order_session['total_booking_fee'], $event);
+        $orderService->calculateFinalCosts();
+
         $data = $order_session + [
-                'event'           => Event::findorFail($order_session['event_id']),
+                'event'           => $event,
                 'secondsToExpire' => $secondsToExpire,
                 'is_embedded'     => $this->is_embedded,
-            ];
+                'orderService'    => $orderService
+                ];
 
         if ($this->is_embedded) {
             return view('Public.ViewEvent.Embedded.EventPageCheckout', $data);
@@ -317,21 +336,41 @@ class EventCheckoutController extends Controller
             }
 
             try {
-
-                $gateway = Omnipay::create($ticket_order['payment_gateway']->name);
-
-                $gateway->initialize($ticket_order['account_payment_gateway']->config + [
-                        'testMode' => config('attendize.enable_test_payments'),
-                    ]);
-
-                $transaction_data = [
-                        'amount'      => ($ticket_order['order_total'] + $ticket_order['organiser_booking_fee']),
-                        'currency'    => $event->currency->code,
-                        'description' => 'Order for customer: ' . $request->get('order_email'),
+                $transaction_data = [];
+                if (config('attendize.enable_dummy_payment_gateway') == TRUE) {
+                    $formData = config('attendize.fake_card_data');
+                    $transaction_data = [
+                        'card' => $formData
                     ];
 
+                    $gateway = Omnipay::create('Dummy');
+                    $gateway->initialize();
+
+                } else {
+                    $gateway = Omnipay::create($ticket_order['payment_gateway']->name);
+                    $gateway->initialize($ticket_order['account_payment_gateway']->config + [
+                            'testMode' => config('attendize.enable_test_payments'),
+                        ]);
+                }
+
+                $orderService = new OrderService($ticket_order['order_total'], $ticket_order['total_booking_fee'], $event);
+                $orderService->calculateFinalCosts();
+              
+                $transaction_data += [
+                        'amount'      => $orderService->getGrandTotal(),
+                        'currency'    => $event->currency->code,
+                        'description' => 'Order for customer: ' . $request->get('order_email'),
+                ];
 
                 switch ($ticket_order['payment_gateway']->id) {
+                    case config('attendize.payment_gateway_dummy'):
+                        $token = uniqid();
+                        $transaction_data += [
+                            'token'         => $token,
+                            'receipt_email' => $request->get('order_email'),
+                            'card' => $formData
+                        ];
+                        break;
                     case config('attendize.payment_gateway_paypal'):
                     case config('attendize.payment_gateway_coinbase'):
 
@@ -378,7 +417,6 @@ class EventCheckoutController extends Controller
                         ]);
                         break;
                 }
-
 
                 $transaction = $gateway->purchase($transaction_data);
 
@@ -527,6 +565,12 @@ class EventCheckoutController extends Controller
             $order->account_id = $event->account->id;
             $order->event_id = $ticket_order['event_id'];
             $order->is_payment_received = isset($request_data['pay_offline']) ? 0 : 1;
+
+            // Calculating grand total including tax
+            $orderService = new OrderService($ticket_order['order_total'], $ticket_order['total_booking_fee'], $event);
+            $orderService->calculateFinalCosts();
+
+            $order->taxamt = $orderService->getTaxAmount();
             $order->save();
 
             /*
@@ -548,7 +592,7 @@ class EventCheckoutController extends Controller
             /*
              * Update the event stats
              */
-            $event_stats = EventStats::firstOrNew([
+            $event_stats = EventStats::updateOrCreate([
                 'event_id' => $event_id,
                 'date'     => DB::raw('CURRENT_DATE'),
             ]);
@@ -701,11 +745,15 @@ class EventCheckoutController extends Controller
             abort(404);
         }
 
+        $orderService = new OrderService($order->amount, $order->organiser_booking_fee, $order->event);
+        $orderService->calculateFinalCosts();
+
         $data = [
-            'order'       => $order,
-            'event'       => $order->event,
-            'tickets'     => $order->event->tickets,
-            'is_embedded' => $this->is_embedded,
+            'order'        => $order,
+            'orderService' => $orderService,
+            'event'        => $order->event,
+            'tickets'      => $order->event->tickets,
+            'is_embedded'  => $this->is_embedded,
         ];
 
         if ($this->is_embedded) {
@@ -729,6 +777,11 @@ class EventCheckoutController extends Controller
         if (!$order) {
             abort(404);
         }
+        $images = [];
+        $imgs = $order->event->images;
+        foreach ($imgs as $img) {
+            $images[] = base64_encode(file_get_contents(public_path($img->image_path)));
+        }
 
         $data = [
             'order'     => $order,
@@ -737,7 +790,7 @@ class EventCheckoutController extends Controller
             'attendees' => $order->attendees,
             'css'       => file_get_contents(public_path('assets/stylesheet/ticket.css')),
             'image'     => base64_encode(file_get_contents(public_path($order->event->organiser->full_logo_path))),
-
+            'images'    => $images,
         ];
 
         if ($request->get('download') == '1') {
