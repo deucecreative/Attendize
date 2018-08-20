@@ -6,6 +6,7 @@ use App\Events\OrderCompletedEvent;
 use App\Jobs\GenerateTicket;
 use App\Jobs\SendOrderNotification;
 use App\Jobs\SendOrderTickets;
+use App\Jobs\SubscribeAttendeesToMailingList;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
@@ -40,6 +41,7 @@ class OrderCompletedListener implements ShouldQueue
         $this->dispatchNow(new GenerateTicket($event->order->order_reference));
         $this->dispatch(new SendOrderTickets($event->order));
         $this->dispatch(new SendOrderNotification($event->order));
+        $this->dispatch(new SubscribeAttendeesToMailingList($event->order));
 
     }
 }

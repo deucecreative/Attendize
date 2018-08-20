@@ -172,6 +172,8 @@ return [
         Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
         Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
         Potsky\LaravelLocalizationHelpers\LaravelLocalizationHelpersServiceProvider::class,
+        Hocza\Sendy\SendyServiceProvider::class,
+
     ],
 
     /*
@@ -234,7 +236,7 @@ return [
         'Purifier'     => Mews\Purifier\Facades\Purifier::class,
         'Markdown'     => MaxHoffmann\Parsedown\ParsedownFacade::class,
         'Omnipay'      => Omnipay\Omnipay::class,
-       // 'Omnipay'      => Omnipay\Omnipay::class,
+        'Sendy'        => Hocza\Sendy\Facades\Sendy::class,
         'LaravelLocalization' => Mcamara\LaravelLocalization\Facades\LaravelLocalization::class,
 
     ],
