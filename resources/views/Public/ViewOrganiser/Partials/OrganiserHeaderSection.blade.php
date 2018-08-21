@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="organiser_logo">
                 <div class="thumbnail">
-                    <img src="{{$organiser->full_logo_path}}" />
+                    <img src="{{URL::to($organiser->full_logo_path)}}" />
                 </div>
             </div>
             @if($organiser->full_logo_path === config('attendize.fallback_organiser_logo_url'))

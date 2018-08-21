@@ -36,6 +36,11 @@ class OrganiserCustomizeController extends MyBaseController
     {
         $organiser = Organiser::scope()->find($organiser_id);
 
+        $chargeTax = $request->get('charge_tax');
+        if ($chargeTax == 1) {
+            $organiser->addExtraValidationRules();
+        }
+
         if (!$organiser->validate($request->all())) {
             return response()->json([
                 'status'   => 'error',
@@ -51,6 +56,11 @@ class OrganiserCustomizeController extends MyBaseController
         $organiser->facebook              = $request->get('facebook');
         $organiser->twitter               = $request->get('twitter');
 
+        $organiser->tax_name              = $request->get('tax_name');
+        $organiser->tax_value             = $request->get('tax_value');
+        $organiser->tax_id                = $request->get('tax_id');
+        $organiser->charge_tax            = ($request->get('charge_tax') == 1) ? 1 : 0;
+
         if ($request->get('remove_current_image') == '1') {
             $organiser->logo_path = '';
         }
@@ -61,7 +71,7 @@ class OrganiserCustomizeController extends MyBaseController
 
         $organiser->save();
 
-        session()->flash('message', 'Successfully Updated Organiser');
+        session()->flash('message', trans("Controllers.successfully_updated_organiser"));
 
         return response()->json([
             'status'      => 'success',
@@ -86,8 +96,8 @@ class OrganiserCustomizeController extends MyBaseController
             'page_text_color'      => ['required'],
         ];
         $messages = [
-            'page_header_bg_color.required' => 'Please enter a header background color.',
-            'page_bg_color.required'        => 'Please enter a background color.',
+            'page_header_bg_color.required' => trans("Controllers.error.page_header_bg_color.required"),
+            'page_bg_color.required'        => trans("Controllers.error.page_bg_color.required"),
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -107,7 +117,7 @@ class OrganiserCustomizeController extends MyBaseController
 
         return response()->json([
             'status'  => 'success',
-            'message' => 'Organiser Design Successfully Updated',
+            'message' => trans("Controllers.organiser_design_successfully_updated"),
         ]);
     }
 }

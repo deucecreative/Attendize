@@ -1,7 +1,7 @@
 <section id="share" class="container">
     <div class="row">
         <h1 class="section_head">
-            Share Event
+            @lang("Public_ViewEvent.share_event")
         </h1>
     </div>
     <div class="row">
@@ -103,7 +103,7 @@
                         </span>
                         <span class="rrssb-text">
                             <div class="rrssb-text-large-format-only">Share on</div>
-                            WhatsApp
+                            @lang("Public_ViewEvent.Whatsapp")
                         </span>
                    </a>
                 </li>
@@ -116,7 +116,7 @@
                         </span>
                         <span class="rrssb-text">
                             <div class="rrssb-text-large-format-only">Share via</div>
-                            email
+                            @lang("Public_ViewEvent.email")
                         </span>
                     </a>
                 </li>
