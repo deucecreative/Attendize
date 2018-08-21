@@ -12,7 +12,7 @@
             <li class="{{ Request::is('*events*') ? 'active' : '' }}">
                 <a href="{{route('showOrganiserEvents', array('organiser_id' => $organiser->id))}}">
                     <span class="figure"><i class="ico-calendar"></i></span>
-                    <span class="text">@lang("Organiser.event")</span>
+                    <span class="text">@lang("Organiser.events")</span>
                 </a>
             </li>
 
