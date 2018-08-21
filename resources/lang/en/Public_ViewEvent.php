@@ -1,6 +1,6 @@
 <?php
 /*************************************************************************
- Generated via "php artisan localization:missing" at 2018/04/18 16:27:47 
+ Generated via "php artisan localization:missing" at 2018/04/18 16:27:47
 *************************************************************************/
 
 return array (
@@ -17,7 +17,7 @@ return array (
   'attendee_cancelled' => 'Cancelled',
   'below_order_details_header' => '',
   'below_payment_information_header' => '',
-  'below_tickets' => 'Choose the number of tickets and click "register". On the next screen you\'ll pay for them.',
+  'below_tickets' => 'Choose the number of tickets and click "register" to proceed to the payment page.',
   'booking_fee' => 'Booking Fee',
   'booking_fees' => 'Booking Fees',
   'card_number' => 'Card number',
