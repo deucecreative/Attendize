@@ -88,18 +88,6 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <h5>Privacy Consent</h5>
-                            <p>By using this form you agree with the storage and handling of your data by us in accordance with our <a href="/privacy-policy/" target="_blank">Privacy Policy</a>.</p>
-
-                            {!! Form::checkbox('order_privacy_policy', 1, false, ['required' => 'required', 'id' => 'order_privacy_policy']) !!}
-                            {!! Form::label('order_privacy_policy', 'I consent to receiving marketing emails from housenights.com', array('class'=>' control-label')) !!}
-                        </div>
-                    </div>
-                </div>
-
                 <div class="p20 pl0">
                     <a href="javascript:void(0);" class="btn btn-primary btn-xs" id="mirror_buyer_info">
                         @lang("Public_ViewEvent.copy_buyer")
@@ -154,6 +142,17 @@
                                 </div>
                                 @endfor
                             @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <h5>Privacy Consent</h5>
+
+                            {!! Form::checkbox('order_privacy_policy', 1, false, ['required' => 'required', 'id' => 'order_privacy_policy']) !!}
+                            {!! sprintf(Form::label('order_privacy_policy', '%s', array('class'=>' control-label')), 'I agree to the storage and handling of this data in accordance with your <a href="/privacy-policy/" target="_blank" style="text-decoration: underline;">Privacy Policy</a>') !!}
                         </div>
                     </div>
                 </div>
@@ -244,4 +243,3 @@
 @if(session()->get('message'))
     <script>showMessage('{{session()->get('message')}}');</script>
 @endif
-
