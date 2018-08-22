@@ -71,6 +71,6 @@ return [
     'default_payment_gateway'    => 1, #Stripe=1 Paypal=2 BitPay=3 MIGS=4,
     'default_items_per_page'     => env('DEFAULT_ITEMS_PER_PAGE', 10),
 
-    'cdn_url_user_assets'   => env('CDN_URL_USER_ASSETS', config('app.url')),
-    'cdn_url_static_assets' => env('CDN_URL_STATIC_ASSETS', config('app.url'))
+    'cdn_url_user_assets'   => env('CDN_URL_USER_ASSETS'),
+    'cdn_url_static_assets' => env('CDN_URL_STATIC_ASSETS')
 ];
