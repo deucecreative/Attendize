@@ -146,6 +146,17 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <h5>Privacy Consent</h5>
+
+                            {!! Form::checkbox('order_privacy_policy', 1, false, ['required' => 'required', 'id' => 'order_privacy_policy']) !!}
+                            {!! sprintf(Form::label('order_privacy_policy', '%s', array('class'=>' control-label')), 'I agree to the storage and handling of this data in accordance with your <a href="/privacy-policy/" target="_blank" style="text-decoration: underline;">Privacy Policy</a>') !!}
+                        </div>
+                    </div>
+                </div>
+
                 <style>
                     .offline_payment_toggle {
                         padding: 20px 0;
@@ -232,4 +243,3 @@
 @if(session()->get('message'))
     <script>showMessage('{{session()->get('message')}}');</script>
 @endif
-

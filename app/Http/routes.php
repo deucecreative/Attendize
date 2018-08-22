@@ -742,5 +742,10 @@ Route::group(
         }
     ]);
 
+    Route::get('/privacy-policy', [
+        'as' => 'privacyPolicy',
+        function () {
+            return view('Public.Static.PrivacyPolicy');
+        }
+    ]);
 });
-
