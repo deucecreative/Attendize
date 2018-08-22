@@ -33,8 +33,6 @@ class SubscribeAttendeesToMailingList extends Job implements ShouldQueue
      */
     public function handle()
     {
-        $client = new Client();
-
         $this->order->attendees->each(function($attendee) {
 
             Log::info(sprintf('Attempting to subscribe %s %s <%s> to mailing list...', $attendee->first_name, $attendee->last_name, $attendee->email));
