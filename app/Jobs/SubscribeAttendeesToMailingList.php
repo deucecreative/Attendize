@@ -42,6 +42,7 @@ class SubscribeAttendeesToMailingList extends Job implements ShouldQueue
                 'name' => $attendee->first_name,
                 'referrer' => config('app.url') . '/order/' . $this->order->order_reference,
                 'gdpr' => 'true',
+                'TicketType' => $attendee->ticket->title,
             ];
 
             $response = Sendy::subscribe($data);
