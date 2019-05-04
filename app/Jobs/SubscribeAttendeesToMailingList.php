@@ -33,18 +33,17 @@ class SubscribeAttendeesToMailingList extends Job implements ShouldQueue
      */
     public function handle()
     {
-        $client = new Client();
-
         $this->order->attendees->each(function($attendee) {
 
-            Log::info(sprintf('Attempting to subscribe %s %s <%s> to mailing list...', $attendee->first_name, $attendee->last_name, $attendee->email));
+            Log::info(sprintf('Subscribing to mailing list: %s %s <%s>', $attendee->first_name, $attendee->last_name, $attendee->email));
 
-            $data = Sendy::subscribe([
+            $data = [
                 'email' => $attendee->email,
                 'name' => $attendee->first_name,
-                'referrer' => config('app.url'),
+                'referrer' => config('app.url') . '/order/' . $this->order->order_reference,
                 'gdpr' => 'true',
-            ]);
+                'TicketType' => $attendee->ticket->title,
+            ];
 
             $response = Sendy::subscribe($data);
 
